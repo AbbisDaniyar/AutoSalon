@@ -1,0 +1,36 @@
+<div class="actions">
+    <a href="/clients/add" class="btn">Добавить клиента</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>Email</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Clients}}
+        <tr>
+            <td>{{this.client_id}}</td>
+            <td><strong>{{this.full_name}}</strong></td>
+            <td>{{this.phone}}</td>
+            <td>{{this.email}}</td>
+            <td>
+                <a href="/clients/edit/{{this.client_id}}" class="btn">Редактировать</a>
+                <a href="/sales/getHistory/{{this.client_id}}" class="btn">История</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{#unless Clients.length}}
+<div style="text-align: center; padding: 2rem; color: #666;">
+    <h3>Клиенты не найдены</h3>
+    <p>Добавьте первого клиента</p>
+</div>
+{{/unless}}

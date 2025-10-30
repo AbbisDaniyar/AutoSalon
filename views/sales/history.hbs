@@ -1,0 +1,46 @@
+<div class="welcome-section">
+    <h2>История покупок</h2>
+
+    {{#if History.length}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Автомобиль</th>
+                <th>Клиент</th>
+                <th>Менеджер</th>
+                <th>Дата</th>
+                <th>Цена</th>
+                <th>Оплата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each History}}
+            <tr>
+                <td>{{this.sale_id}}</td>
+                <td><strong>{{this.brand_name}} {{this.model_name}}</strong><br><small>{{this.color}}, {{this.vin}}</small></td>
+                <td>{{this.client_name}}</td>
+                <td>{{this.employee_name}}</td>
+                <td>{{this.sale_date}}</td>
+                <td><strong>{{this.sale_price}} ₽</strong></td>
+                <td>
+                    {{#if (eq this.payment_type 'cash')}}Наличные{{/if}}
+                    {{#if (eq this.payment_type 'card')}}Карта{{/if}}
+                    {{#if (eq this.payment_type 'credit')}}Кредит{{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <div style="text-align: center; padding: 3rem; color: #666;">
+        <h3>История покупок пуста</h3>
+        <p>У этого клиента пока нет совершенных покупок</p>
+    </div>
+    {{/if}}
+
+    <div style="margin-top: 2rem;">
+        <a href="/clients" class="btn">К клиентам</a>
+        <a href="/cars" class="btn">К автомобилям</a>
+    </div>
+</div>

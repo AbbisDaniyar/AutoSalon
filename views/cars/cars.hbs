@@ -1,0 +1,108 @@
+<div class="actions">
+    <a href="/cars/add" class="btn">Добавить автомобиль</a>
+    {{#if cartLen}}
+    <div class="cart-info">
+        Корзина: {{cartLen}} авто
+        <a href="/sales/getCart" class="btn" style="margin-left: 1rem;">Оформить продажу</a>
+    </div>
+    {{/if}}
+</div>
+
+<div class="filters">
+    <h3>Фильтры:</h3>
+    <form action="/cars" method="GET">
+        <div class="filter-group">
+            <label>Бренд:</label>
+            <select name="brandId">
+                <option value="0">Все бренды</option>
+                {{#each Brands}}
+                <option value="{{this.brand_id}}" {{#if (eq this.brand_id ../curBrandId)}}selected{{/if}}>
+                    {{this.brand_name}}
+                </option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Тип кузова:</label>
+            <select name="carType">
+                <option value="all">Все типы</option>
+                <option value="sedan" {{#if (eq curCarType 'sedan')}}selected{{/if}}>Седан</option>
+                <option value="suv" {{#if (eq curCarType 'suv')}}selected{{/if}}>Внедорожник</option>
+                <option value="hatchback" {{#if (eq curCarType 'hatchback')}}selected{{/if}}>Хэтчбек</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Двигатель:</label>
+            <select name="engine">
+                <option value="all">Все типы</option>
+                <option value="petrol" {{#if (eq curEngine 'petrol')}}selected{{/if}}>Бензин</option>
+                <option value="diesel" {{#if (eq curEngine 'diesel')}}selected{{/if}}>Дизель</option>
+                <option value="electric" {{#if (eq curEngine 'electric')}}selected{{/if}}>Электрический</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Применить фильтры</button>
+        <a href="/cars" class="btn">Сбросить</a>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Бренд</th>
+            <th>Модель</th>
+            <th>Цвет</th>
+            <th>Двигатель</th>
+            <th>Коробка</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Cars}}
+        <tr>
+            <td>{{this.car_id}}</td>
+            <td>{{this.brand_name}}</td>
+            <td>{{this.model_name}}</td>
+            <td>{{this.color}}</td>
+            <td>
+                {{#if (eq this.engine 'petrol')}}Бензин{{/if}}
+                {{#if (eq this.engine 'diesel')}}Дизель{{/if}}
+                {{#if (eq this.engine 'electric')}}Электрический{{/if}}
+            </td>
+            <td>
+                {{#if (eq this.transmission 'manual')}}Механика{{/if}}
+                {{#if (eq this.transmission 'automatic')}}Автомат{{/if}}
+            </td>
+            <td><strong>{{this.price}} ₽</strong></td>
+            <td>
+                {{#if (eq this.status 'available')}}<span class="status-available">В наличии</span>{{/if}}
+                {{#if (eq this.status 'reserved')}}<span class="status-reserved">Забронирован</span>{{/if}}
+                {{#if (eq this.status 'sold')}}<span class="status-sold">Продан</span>{{/if}}
+            </td>
+            <td>
+                <a href="/cars/edit/{{this.car_id}}" class="btn">Редактировать</a>
+                {{#if (eq this.status 'available')}}
+                <a href="/sales/addToCart/{{this.car_id}}" class="btn btn-success">В корзину</a>
+                {{/if}}
+                <form action="/cars/delete/{{this.car_id}}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Удалить автомобиль?')">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{#unless Cars.length}}
+<div style="text-align: center; padding: 2rem; color: #666;">
+    <h3>Автомобили не найдены</h3>
+    <p>Попробуйте изменить параметры фильтрации</p>
+</div>
+{{/unless}}
