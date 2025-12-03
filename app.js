@@ -1,21 +1,29 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
 
+const exphbs = require('express-handlebars');
+
+// создаём экземпляр движка с помощью express-handlebars
+const hbsEngine = exphbs.create({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    layoutsDir: path.join(__dirname, 'views', 'layouts'),
+    helpers: {
+        eq: (a, b) => a === b
+    }
+});
+
+app.engine('hbs', hbsEngine.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-const hbs = require('hbs');
-hbs.registerHelper('eq', function(a, b) {
-    return a === b;
-});
 
 const homeRouter = require('./routes/homeRouter');
 const carRouter = require('./routes/carRouter');
